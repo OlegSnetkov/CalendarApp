@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CalendarApp</string>
+
+    <string name="event_name">Event name</string>
+    <string name="pick_time">Pick time</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <style name="MyTimePickerDialogStyle" parent="@style/ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="showTitle">false</item>
+        <item name="colorControlActivated">#ffd600</item>
+        <item name="colorAccent">#b71c1c</item>
+        <item name="android:textColorPrimary">#43a047</item>
+        <item name="android:textColorSecondary">#f44336</item>
+    </style>
+
+</resources>
