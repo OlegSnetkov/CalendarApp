@@ -7,7 +7,7 @@ import org.bson.types.ObjectId
 import org.jetbrains.annotations.NotNull
 
 
-open class NewCaseRealm(
+open class NewEventRealm(
     @PrimaryKey
     var id: String = ObjectId().toHexString(),
     @NotNull

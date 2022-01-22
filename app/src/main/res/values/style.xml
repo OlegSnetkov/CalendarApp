@@ -2,12 +2,25 @@
 
 <resources>
 
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
     <style name="MyTimePickerDialogStyle" parent="@style/ThemeOverlay.AppCompat.Dialog.Alert">
         <item name="showTitle">false</item>
-        <item name="colorControlActivated">#ffd600</item>
-        <item name="colorAccent">#b71c1c</item>
-        <item name="android:textColorPrimary">#43a047</item>
-        <item name="android:textColorSecondary">#f44336</item>
+        <item name="colorControlActivated">#95f7aa5e</item>
+        <item name="colorAccent">#95397dd5</item>
+        <item name="android:textColorPrimary">#397dd5</item>
+        <item name="android:textColorSecondary">#f7aa5e</item>
     </style>
+
+    <style name="MaterialButton" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="colorPrimary">#95f7aa5e</item>
+    </style>
+
 
 </resources>

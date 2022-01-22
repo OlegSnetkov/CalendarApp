@@ -5,9 +5,9 @@ import io.realm.RealmConfiguration
 import io.realm.kotlin.executeTransactionAwait
 import kotlinx.coroutines.Dispatchers
 
-class TodoDatabaseOperations(private val config: RealmConfiguration) {
+class DatabaseOperations(private val config: RealmConfiguration) {
 
-    suspend fun insertNewCase(
+    suspend fun insertNewEvent(
         dateStart: Long,
         dateFinish: Long,
         name: String,
@@ -16,13 +16,13 @@ class TodoDatabaseOperations(private val config: RealmConfiguration) {
         val realm = Realm.getInstance(config)
 
         realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
-            val newCase = NewCaseRealm(
+            val newEvent = NewEventRealm(
                 dateStart = dateStart,
                 dateFinish = dateFinish,
                 name = name,
                 description = description
             )
-            realmTransaction.insert(newCase)
+            realmTransaction.insert(newEvent)
         }
     }
 }
