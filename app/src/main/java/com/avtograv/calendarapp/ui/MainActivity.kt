@@ -3,6 +3,11 @@ package com.avtograv.calendarapp.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.avtograv.calendarapp.R
+import androidx.lifecycle.ViewModelProvider
+
+
+
+
 
 class MainActivity : AppCompatActivity(), AddEventFragment.ClickAddEvent,
     CalendarFragment.OnAddEvent {

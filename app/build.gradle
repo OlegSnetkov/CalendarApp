@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'realm-android'
 }
 
 
@@ -9,7 +10,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.avtograv.calendarapp"
+        applicationId "com.avtograv.myapplication"
         minSdk 26
         targetSdk 31
         versionCode 1
@@ -46,8 +47,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    api "io.realm:realm-annotations:$realm_version"
-    api "io.realm:realm-android-library:$realm_version"
-    api "io.realm:realm-android-kotlin-extensions:$realm_version"
-    kapt "io.realm:realm-annotations-processor:$realm_version"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
 }

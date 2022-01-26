@@ -6,13 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.avtograv.calendarapp.databinding.FragmentAddEventBinding
+import com.avtograv.calendarapp.viewmodels.AddEventViewModel
 
 class AddEventFragment : Fragment() {
 
     private var _binding: FragmentAddEventBinding? = null
     private val binding get() = _binding!!
     private var clickListener: ClickAddEvent? = null
+
+    private val viewModel: AddEventViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -33,14 +37,34 @@ class AddEventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSetDate.setOnClickListener {
-            clickListener?.setDatePicker()
-        }
-        binding.buttonSetTime.setOnClickListener {
-            clickListener?.setTimePicker()
-        }
-        binding.buttonAddEvent.setOnClickListener{
-            clickListener?.routeCalendarFragment()
+        setupButtons()
+    }
+
+    private fun setupButtons() {
+
+        binding.apply {
+            buttonSetDate.setOnClickListener {
+                clickListener?.setDatePicker()
+            }
+            buttonSetTime.setOnClickListener {
+                clickListener?.setTimePicker()
+            }
+            buttonAddEvent.setOnClickListener {
+                textInputNameEvent.error = ""
+                if (viewModel.isValid(editTextNameEvent.text.toString())) {
+                    viewModel.addEvent(
+                        123,  // TODO
+                        321,
+                        editTextNameEvent.text.toString(),
+                        editTextDescription.text.toString()
+                    )
+                    clickListener?.routeCalendarFragment()
+                }
+            }
+
+            viewModel.allEvents.observe(requireActivity(), {
+                // TODO
+            })
         }
     }
 
