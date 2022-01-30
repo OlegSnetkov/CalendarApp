@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CalendarApp</string>
 
-    <string name="event_name">Event</string>
+    <string name="event_name">Event name</string>
     <string name="description">Description</string>
 
     <string name="picker_date">Picker date</string>
@@ -15,9 +15,13 @@
 
 
     <string name="name_error">Name cannot be empty</string>
-    <string name="age_error">Age cannot be empty</string>
     <string name="owned_by">Owner: %s</string>
-    <string name="set_date">Set date</string>
-    <string name="set_time">Set time</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="event_from">Event from:</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="set_time">set time</string>
+    <string name="set_date">set date</string>
 
 </resources>

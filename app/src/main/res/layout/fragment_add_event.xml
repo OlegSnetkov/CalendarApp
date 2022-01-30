@@ -11,7 +11,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_name_event"
-            style="@style/MaterialButton"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/event_name"
@@ -44,59 +44,117 @@
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <TextView
             android:id="@+id/type_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/text_medium"
-            android:layout_marginTop="28dp"
+            android:layout_marginStart="@dimen/space_normal"
+            android:layout_marginBottom="24dp"
             android:text="@string/Enter_date_and_time"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_from"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_begin="235dp"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_normal"
+            android:text="@string/from"
+            android:textSize="@dimen/text_small"
+            app:layout_constraintBottom_toBottomOf="@+id/guideline_from"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_input_description" />
+            app:layout_constraintTop_toTopOf="@+id/guideline_from" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_set_date"
+            android:id="@+id/bt_set_from_date"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/space_small"
-            android:layout_marginTop="@dimen/space_small"
+            android:layout_marginEnd="@dimen/space_normal"
+            android:backgroundTint="@color/colorSecondary"
+            android:onClick="showTimePickerDialog"
             android:text="@string/set_date"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_set_time"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/type_text_view"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintBottom_toBottomOf="@+id/guideline_from"
+            app:layout_constraintEnd_toStartOf="@+id/bt_set_from_time"
+            app:layout_constraintTop_toTopOf="@+id/guideline_from" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_set_time"
+            android:id="@+id/bt_set_from_time"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/space_small"
-            android:layout_marginTop="@dimen/space_small"
+            android:layout_marginEnd="@dimen/space_normal"
+            android:backgroundTint="@color/colorSecondary"
             android:text="@string/set_time"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/guideline_from"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_set_date"
-            app:layout_constraintTop_toBottomOf="@id/type_text_view"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/guideline_from" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_begin="296dp"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_normal"
+            android:text="@string/to"
+            android:textSize="@dimen/text_small"
+            app:layout_constraintBottom_toBottomOf="@+id/guideline_to"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline_to" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_set_to_date"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_normal"
+            android:backgroundTint="@color/colorSecondary"
+            android:text="@string/set_date"
+            app:layout_constraintBottom_toBottomOf="@+id/guideline_to"
+            app:layout_constraintEnd_toStartOf="@+id/bt_set_from_time"
+            app:layout_constraintTop_toTopOf="@+id/guideline_to" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_set_to_time"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_normal"
+            android:backgroundTint="@color/colorSecondary"
+            android:text="@string/set_time"
+            app:layout_constraintBottom_toBottomOf="@+id/guideline_to"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline_to" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_add_event"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/space_small"
-            android:layout_marginTop="@dimen/space_big"
+            android:layout_marginHorizontal="@dimen/space_normal"
+            android:layout_marginTop="@dimen/space_huge"
+            android:backgroundTint="@color/colorSecondary"
             android:text="@string/add_event"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_set_date" />
+            app:layout_constraintTop_toBottomOf="@+id/guideline_to" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

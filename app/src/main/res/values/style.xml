@@ -10,17 +10,4 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
-    <style name="MyTimePickerDialogStyle" parent="@style/ThemeOverlay.AppCompat.Dialog.Alert">
-        <item name="showTitle">false</item>
-        <item name="colorControlActivated">#95f7aa5e</item>
-        <item name="colorAccent">#95397dd5</item>
-        <item name="android:textColorPrimary">#397dd5</item>
-        <item name="android:textColorSecondary">#f7aa5e</item>
-    </style>
-
-    <style name="MaterialButton" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="colorPrimary">#95f7aa5e</item>
-    </style>
-
-
 </resources>

@@ -1,6 +1,5 @@
 package com.avtograv.calendarapp.viewmodels
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,7 @@ import io.realm.Realm
 import java.util.*
 
 
-class AddEventViewModel() : ViewModel() {
+class AddEventViewModel : ViewModel() {
 
     private val realm = Realm.getDefaultInstance()
 

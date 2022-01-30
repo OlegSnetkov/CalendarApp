@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.avtograv.calendarapp.databinding.FragmentCalendarBinding
 
+
 class CalendarFragment : Fragment() {
 
     private var _binding: FragmentCalendarBinding? = null
@@ -32,7 +33,7 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btAddEvent.setOnClickListener{
+        binding.floatingActionButton.setOnClickListener{
             clickListener?.routeAddEventFragment()
         }
     }

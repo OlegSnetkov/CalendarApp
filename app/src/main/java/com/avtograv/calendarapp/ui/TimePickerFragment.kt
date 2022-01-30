@@ -2,13 +2,12 @@ package com.avtograv.calendarapp.ui
 
 import android.app.Dialog
 import android.app.TimePickerDialog
-
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.widget.TimePicker
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import com.avtograv.calendarapp.R
-
+import androidx.fragment.app.setFragmentResult
 import java.util.*
 
 
@@ -22,7 +21,6 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
 
         return TimePickerDialog(
             activity,
-            R.style.MyTimePickerDialogStyle,
             this,
             hour,
             minute,
@@ -31,6 +29,8 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        TODO("Not yet implemented")
+
+        setFragmentResult("requestKey",
+            bundleOf("bundleHour" to hourOfDay, "bundleMinute" to minute))
     }
 }

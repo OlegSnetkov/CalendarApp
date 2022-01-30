@@ -1,14 +1,19 @@
 package com.avtograv.calendarapp.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import com.avtograv.calendarapp.databinding.FragmentAddEventBinding
 import com.avtograv.calendarapp.viewmodels.AddEventViewModel
+import java.util.*
+
 
 class AddEventFragment : Fragment() {
 
@@ -25,6 +30,25 @@ class AddEventFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setFragmentResultListener("fromDatePicker") { _, bundle ->
+            val eventDateStartTimestamp = bundle.getLong("bundleKey")
+            val eventDateStart = bundle.getString(" ")
+            binding.btSetFromDate.text = eventDateStart
+        }
+
+        setFragmentResultListener("fromTimePicker") { _, bundle ->
+//            val eventTimeStartTimestamp = bundle.getLong("bundleKey")
+            val eventHourStart = bundle.getInt("hours").toString()
+            val eventMinuteStart = bundle.getInt("minutes").toString()
+            binding.btSetFromTime.text = "$eventHourStart : $eventMinuteStart"
+        }
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,18 +61,32 @@ class AddEventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val timestampStart = GregorianCalendar(2020 + 1900, 0, 28, 20, 7)
+        val timestampFinish = GregorianCalendar(2020 + 1900, 0, 28, 20, 7)
+
         setupButtons()
     }
+
 
     private fun setupButtons() {
 
         binding.apply {
-            buttonSetDate.setOnClickListener {
-                clickListener?.setDatePicker()
+            btSetFromDate.setOnClickListener {
+                clickListener?.setFromDatePicker()
             }
-            buttonSetTime.setOnClickListener {
-                clickListener?.setTimePicker()
+
+            btSetFromTime.setOnClickListener {
+                clickListener?.setFromTimePicker()
             }
+
+            btSetToDate.setOnClickListener {
+                clickListener?.setToDatePicker()
+            }
+
+            btSetToTime.setOnClickListener {
+                clickListener?.setToTimePicker()
+            }
+
             buttonAddEvent.setOnClickListener {
                 textInputNameEvent.error = ""
                 if (viewModel.isValid(editTextNameEvent.text.toString())) {
@@ -61,10 +99,6 @@ class AddEventFragment : Fragment() {
                     clickListener?.routeCalendarFragment()
                 }
             }
-
-            viewModel.allEvents.observe(requireActivity(), {
-                // TODO
-            })
         }
     }
 
@@ -79,8 +113,11 @@ class AddEventFragment : Fragment() {
     }
 
     interface ClickAddEvent {
-        fun setTimePicker()
-        fun setDatePicker()
+//        fun setRangePicker()
+        fun setFromDatePicker()
+        fun setToDatePicker()
+        fun setFromTimePicker()
+        fun setToTimePicker()
         fun routeCalendarFragment()
     }
 
