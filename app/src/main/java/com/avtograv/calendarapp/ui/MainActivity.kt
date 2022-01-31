@@ -1,7 +1,6 @@
 package com.avtograv.calendarapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
@@ -47,33 +46,20 @@ class MainActivity : AppCompatActivity(), AddEventFragment.ClickAddEvent,
             .commit()
     }
 
+    override fun setRangeDatePicker() {
+        val dateRangePicker =
+            MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Select dates")
+                .build()
+        dateRangePicker.show(supportFragmentManager, "DateRangePicker")
 
-//    override fun setRangePicker() {
-//        val dateRangePicker =
-//            MaterialDatePicker.Builder.dateRangePicker()
-//                .setTitleText("Select dates")
-//                .build()
-//        dateRangePicker.show(supportFragmentManager, "DateRangePicker")
-//    }
-
-    override fun setFromDatePicker() {
-        val materialDatePicker = MaterialDatePicker.Builder.datePicker()
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-            .build()
-        materialDatePicker.show(supportFragmentManager, "MaterialDatePicker")
-
-        materialDatePicker.addOnPositiveButtonClickListener {
-            Log.d("MaterialDatePicker",
-                "Date String = ${materialDatePicker.headerText} :: Date epoch value = $it")
-            materialDatePicker.setFragmentResult(
-                "fromDatePicker", bundleOf(
-                    "bundleKey" to it,
-                    " " to materialDatePicker.headerText))
+        dateRangePicker.addOnPositiveButtonClickListener {
+            dateRangePicker.setFragmentResult(
+                "fromDateRangePicker", bundleOf(
+                    "fromDateTimestamp" to it.first,
+                    "toDateTimestamp" to it.second)
+            )
         }
-    }
-
-    override fun setToDatePicker() {
-        TODO("Not yet implemented")
     }
 
     override fun setFromTimePicker() {
@@ -81,17 +67,32 @@ class MainActivity : AppCompatActivity(), AddEventFragment.ClickAddEvent,
             .setTitleText("SELECT YOUR TIMING")
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .build()
-        materialTimePicker.show(supportFragmentManager, "MaterialTimePicker")
+        materialTimePicker.show(supportFragmentManager, "MaterialFromTimePicker")
 
         materialTimePicker.addOnPositiveButtonClickListener {
             materialTimePicker.setFragmentResult(
-                "fromTimePicker", bundleOf(
-                    "hours" to materialTimePicker.hour,
-                    "minutes" to materialTimePicker.minute))
+                "timeEventFrom", bundleOf(
+                    "FromHour" to materialTimePicker.hour.toString(),
+                    "FromMinute" to materialTimePicker.minute.toString()
+                )
+            )
         }
     }
 
     override fun setToTimePicker() {
-        TODO("Not yet implemented")
+        val materialTimePicker = MaterialTimePicker.Builder()
+            .setTitleText("SELECT YOUR TIMING")
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .build()
+        materialTimePicker.show(supportFragmentManager, "MaterialToTimePicker")
+
+        materialTimePicker.addOnPositiveButtonClickListener {
+            materialTimePicker.setFragmentResult(
+                "timeEventTo", bundleOf(
+                    "ToHour" to materialTimePicker.hour.toString(),
+                    "ToMinute" to materialTimePicker.minute.toString()
+                )
+            )
+        }
     }
 }

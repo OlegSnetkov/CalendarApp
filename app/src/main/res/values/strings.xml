@@ -16,12 +16,9 @@
 
     <string name="name_error">Name cannot be empty</string>
     <string name="owned_by">Owner: %s</string>
-    <string name="ok">Ok</string>
-    <string name="cancel">Cancel</string>
-    <string name="event_from">Event from:</string>
-    <string name="from">From:</string>
-    <string name="to">To:</string>
-    <string name="set_time">set time</string>
-    <string name="set_date">set date</string>
+    <string name="date_or_range_dates">date / range dates</string>
+    <string name="from_time">From time</string>
+    <string name="to_time">To time</string>
+    <string name="set">Set</string>
 
 </resources>

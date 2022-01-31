@@ -1,6 +1,5 @@
 package com.avtograv.calendarapp.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import com.avtograv.calendarapp.databinding.FragmentAddEventBinding
 import com.avtograv.calendarapp.viewmodels.AddEventViewModel
+import java.sql.Date
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -20,7 +21,6 @@ class AddEventFragment : Fragment() {
     private var _binding: FragmentAddEventBinding? = null
     private val binding get() = _binding!!
     private var clickListener: ClickAddEvent? = null
-
     private val viewModel: AddEventViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
@@ -30,23 +30,41 @@ class AddEventFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setFragmentResultListener("fromDatePicker") { _, bundle ->
-            val eventDateStartTimestamp = bundle.getLong("bundleKey")
-            val eventDateStart = bundle.getString(" ")
-            binding.btSetFromDate.text = eventDateStart
+        setFragmentResultListener("fromDateRangePicker") { _, bundle ->
+            val eventDateStart = bundle.getLong("fromDateTimestamp")
+            val eventStartHumanDateList = listOf(
+                SimpleDateFormat("yyyy", Locale.US).format(Date(eventDateStart)),
+                SimpleDateFormat("MM", Locale.US).format(Date(eventDateStart)),
+                SimpleDateFormat("d", Locale.US).format(Date(eventDateStart))
+            )
+            val eventDateFinish = bundle.getLong("toDateTimestamp")
+            val eventFinishHumanDateList = listOf(
+                SimpleDateFormat("yyyy", Locale.US).format(Date(eventDateFinish)),
+                SimpleDateFormat("MM", Locale.US).format(Date(eventDateFinish)),
+                SimpleDateFormat("d", Locale.US).format(Date(eventDateFinish))
+            )
+            Log.d("fromDateTimestamp", "FromTime : $eventStartHumanDateList")
+            Log.d("toDateTimestamp", "FromTime : $eventFinishHumanDateList")
         }
 
-        setFragmentResultListener("fromTimePicker") { _, bundle ->
-//            val eventTimeStartTimestamp = bundle.getLong("bundleKey")
-            val eventHourStart = bundle.getInt("hours").toString()
-            val eventMinuteStart = bundle.getInt("minutes").toString()
-            binding.btSetFromTime.text = "$eventHourStart : $eventMinuteStart"
+        setFragmentResultListener("timeEventFrom") { _, bundle ->
+            val eventTimeStartList = listOf(
+                bundle.getString("FromHour"),
+                bundle.getString("FromMinute")
+            )
+            Log.d("timeEventFrom", "FromTime : $eventTimeStartList")
         }
 
+        setFragmentResultListener("timeEventTo") { _, bundle ->
+            val eventTimeFinishList = listOf(
+                bundle.getString("ToHour"),
+                bundle.getString("ToMinute")
+            )
+            Log.d("timeEventTo", "ToTime : $eventTimeFinishList")
+        }
     }
 
     override fun onCreateView(
@@ -61,26 +79,18 @@ class AddEventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val timestampStart = GregorianCalendar(2020 + 1900, 0, 28, 20, 7)
-        val timestampFinish = GregorianCalendar(2020 + 1900, 0, 28, 20, 7)
-
         setupButtons()
     }
-
 
     private fun setupButtons() {
 
         binding.apply {
-            btSetFromDate.setOnClickListener {
-                clickListener?.setFromDatePicker()
+            btSetRangeDate.setOnClickListener {
+                clickListener?.setRangeDatePicker()
             }
 
             btSetFromTime.setOnClickListener {
                 clickListener?.setFromTimePicker()
-            }
-
-            btSetToDate.setOnClickListener {
-                clickListener?.setToDatePicker()
             }
 
             btSetToTime.setOnClickListener {
@@ -113,9 +123,7 @@ class AddEventFragment : Fragment() {
     }
 
     interface ClickAddEvent {
-//        fun setRangePicker()
-        fun setFromDatePicker()
-        fun setToDatePicker()
+        fun setRangeDatePicker()
         fun setFromTimePicker()
         fun setToTimePicker()
         fun routeCalendarFragment()

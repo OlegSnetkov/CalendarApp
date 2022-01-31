@@ -69,36 +69,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_normal"
-            android:text="@string/from"
+            android:text="@string/set"
             android:textSize="@dimen/text_small"
             app:layout_constraintBottom_toBottomOf="@+id/guideline_from"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline_from" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/bt_set_from_date"
+            android:id="@+id/bt_set_range_date"
             style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/space_normal"
             android:backgroundTint="@color/colorSecondary"
-            android:onClick="showTimePickerDialog"
-            android:text="@string/set_date"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline_from"
-            app:layout_constraintEnd_toStartOf="@+id/bt_set_from_time"
-            app:layout_constraintTop_toTopOf="@+id/guideline_from" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/bt_set_from_time"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/space_normal"
-            android:backgroundTint="@color/colorSecondary"
-            android:text="@string/set_time"
+            android:text="@string/date_or_range_dates"
             app:layout_constraintBottom_toBottomOf="@+id/guideline_from"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline_from" />
+
+
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_to"
@@ -113,32 +102,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_normal"
-            android:text="@string/to"
+            android:text="@string/set"
             android:textSize="@dimen/text_small"
             app:layout_constraintBottom_toBottomOf="@+id/guideline_to"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline_to" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/bt_set_to_date"
+            android:id="@+id/bt_set_from_time"
             style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
+            android:layout_width="142dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/space_normal"
             android:backgroundTint="@color/colorSecondary"
-            android:text="@string/set_date"
+            android:text="@string/from_time"
             app:layout_constraintBottom_toBottomOf="@+id/guideline_to"
-            app:layout_constraintEnd_toStartOf="@+id/bt_set_from_time"
+            app:layout_constraintEnd_toStartOf="@+id/bt_set_to_time"
             app:layout_constraintTop_toTopOf="@+id/guideline_to" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bt_set_to_time"
             style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
+            android:layout_width="142dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/space_normal"
             android:backgroundTint="@color/colorSecondary"
-            android:text="@string/set_time"
+            android:text="@string/to_time"
             app:layout_constraintBottom_toBottomOf="@+id/guideline_to"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline_to" />
