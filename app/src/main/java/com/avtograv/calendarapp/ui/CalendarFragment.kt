@@ -42,6 +42,7 @@ class CalendarFragment : Fragment() {
         adapterRecyclerView = AdapterRecyclerView()
         viewModel.allEvents.observe(requireActivity()) { allEvents ->
             adapterRecyclerView.submitList(allEvents)
+            binding.recyclerViewEvents.adapter = adapterRecyclerView
         }
 
         binding.floatingActionButton.setOnClickListener {
