@@ -2,7 +2,6 @@ package com.avtograv.calendarapp.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import com.avtograv.calendarapp.databinding.FragmentAddEventBinding
-import com.avtograv.calendarapp.viewmodels.AddEventViewModel
+import com.avtograv.calendarapp.viewmodels.EventViewModel
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,7 +20,12 @@ class AddEventFragment : Fragment() {
     private var _binding: FragmentAddEventBinding? = null
     private val binding get() = _binding!!
     private var clickListener: ClickAddEvent? = null
-    private val viewModel: AddEventViewModel by activityViewModels()
+    private val viewModel: EventViewModel by activityViewModels()
+
+    private var eventDateStartList = mutableListOf<String?>()
+    private var eventDateFinishList = mutableListOf<String?>()
+    private var eventTimeStartList = mutableListOf<String?>()
+    private var eventTimeFinishList = mutableListOf<String?>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -35,35 +39,36 @@ class AddEventFragment : Fragment() {
 
         setFragmentResultListener("fromDateRangePicker") { _, bundle ->
             val eventDateStart = bundle.getLong("fromDateTimestamp")
-            val eventStartHumanDateList = listOf(
-                SimpleDateFormat("yyyy", Locale.US).format(Date(eventDateStart)),
-                SimpleDateFormat("MM", Locale.US).format(Date(eventDateStart)),
-                SimpleDateFormat("d", Locale.US).format(Date(eventDateStart))
+            this.eventDateStartList.addAll(
+                listOf(
+                    SimpleDateFormat("yyyy", Locale.US).format(Date(eventDateStart)),
+                    SimpleDateFormat("MM", Locale.US).format(Date(eventDateStart)),
+                    SimpleDateFormat("d", Locale.US).format(Date(eventDateStart))
+                )
             )
+
             val eventDateFinish = bundle.getLong("toDateTimestamp")
-            val eventFinishHumanDateList = listOf(
-                SimpleDateFormat("yyyy", Locale.US).format(Date(eventDateFinish)),
-                SimpleDateFormat("MM", Locale.US).format(Date(eventDateFinish)),
-                SimpleDateFormat("d", Locale.US).format(Date(eventDateFinish))
+            eventDateFinishList.addAll(
+                listOf(
+                    SimpleDateFormat("yyyy", Locale.US).format(Date(eventDateFinish)),
+                    SimpleDateFormat("MM", Locale.US).format(Date(eventDateFinish)),
+                    SimpleDateFormat("d", Locale.US).format(Date(eventDateFinish))
+                )
             )
-            Log.d("fromDateTimestamp", "FromTime : $eventStartHumanDateList")
-            Log.d("toDateTimestamp", "FromTime : $eventFinishHumanDateList")
         }
 
         setFragmentResultListener("timeEventFrom") { _, bundle ->
-            val eventTimeStartList = listOf(
+            eventTimeStartList = mutableListOf(
                 bundle.getString("FromHour"),
                 bundle.getString("FromMinute")
             )
-            Log.d("timeEventFrom", "FromTime : $eventTimeStartList")
         }
 
         setFragmentResultListener("timeEventTo") { _, bundle ->
-            val eventTimeFinishList = listOf(
+            eventTimeFinishList = mutableListOf(
                 bundle.getString("ToHour"),
                 bundle.getString("ToMinute")
             )
-            Log.d("timeEventTo", "ToTime : $eventTimeFinishList")
         }
     }
 
@@ -98,14 +103,33 @@ class AddEventFragment : Fragment() {
             }
 
             buttonAddEvent.setOnClickListener {
+
+                val eventDateTimeStart = GregorianCalendar(
+                    eventDateStartList[0]!!.toInt(),
+                    eventDateStartList[1]!!.toInt() - 1,
+                    eventDateStartList[2]!!.toInt(),
+                    eventTimeStartList[0]!!.toInt(),
+                    eventTimeStartList[1]!!.toInt()
+                ).timeInMillis
+
+                val eventDateTimeFinish = GregorianCalendar(
+                    eventDateFinishList[0]!!.toInt(),
+                    eventDateFinishList[1]!!.toInt() - 1,
+                    eventDateFinishList[2]!!.toInt(),
+                    eventTimeFinishList[0]!!.toInt(),
+                    eventTimeFinishList[1]!!.toInt()
+                ).timeInMillis
+
                 textInputNameEvent.error = ""
+
                 if (viewModel.isValid(editTextNameEvent.text.toString())) {
                     viewModel.addEvent(
-                        123,  // TODO
-                        321,
+                        eventDateTimeStart,
+                        eventDateTimeFinish,
                         editTextNameEvent.text.toString(),
                         editTextDescription.text.toString()
                     )
+
                     clickListener?.routeCalendarFragment()
                 }
             }

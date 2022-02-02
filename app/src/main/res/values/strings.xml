@@ -20,5 +20,6 @@
     <string name="from_time">From time</string>
     <string name="to_time">To time</string>
     <string name="set">Set</string>
+    <string name="to_addEvent_button">To addEvent button</string>
 
 </resources>

@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.avtograv.calendarapp.databinding.FragmentCalendarBinding
+import com.avtograv.calendarapp.viewmodels.EventViewModel
 
 
 class CalendarFragment : Fragment() {
@@ -14,6 +16,9 @@ class CalendarFragment : Fragment() {
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
     private var clickListener: OnAddEvent? = null
+    private lateinit var adapterRecyclerView: AdapterRecyclerView
+    private val viewModel: EventViewModel by activityViewModels()
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -33,7 +38,13 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.floatingActionButton.setOnClickListener{
+
+        adapterRecyclerView = AdapterRecyclerView()
+        viewModel.allEvents.observe(requireActivity()) { allEvents ->
+            adapterRecyclerView.submitList(allEvents)
+        }
+
+        binding.floatingActionButton.setOnClickListener {
             clickListener?.routeAddEventFragment()
         }
     }

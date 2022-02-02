@@ -8,6 +8,7 @@
         <entry key="..\:/_AndroidAcademy/CalendarApp/app/src/main/res/drawable/sample_circle.xml" value="0.2703125" />
         <entry key="..\:/_AndroidAcademy/CalendarApp/app/src/main/res/layout/activity_main.xml" value="0.11614583333333334" />
         <entry key="..\:/_AndroidAcademy/CalendarApp/app/src/main/res/layout/date_time_picker_fragment.xml" value="0.25416666666666665" />
+        <entry key="..\:/_AndroidAcademy/CalendarApp/app/src/main/res/layout/event_row.xml" value="0.24010416666666667" />
         <entry key="..\:/_AndroidAcademy/CalendarApp/app/src/main/res/layout/fragment_add_event.xml" value="0.24010416666666667" />
         <entry key="..\:/_AndroidAcademy/CalendarApp/app/src/main/res/layout/fragment_calendar.xml" value="0.25416666666666665" />
         <entry key="..\:/_AndroidAcademy/CalendarApp/app/src/main/res/layout/fragment_pickers.xml" value="0.25416666666666665" />
