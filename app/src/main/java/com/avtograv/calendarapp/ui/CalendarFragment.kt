@@ -40,17 +40,18 @@ class CalendarFragment : Fragment() {
 
         adapterRecyclerView = AdapterRecyclerView()
 
-//        viewModel.getEventsOfToday.observe(requireActivity()) { eventsOfDay ->
-//            adapterRecyclerView.submitList(eventsOfDay)
-//            binding.recyclerViewEvents.adapter = adapterRecyclerView
-//        }
-
-        binding.calendar.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            val timestamp = GregorianCalendar(year, month, dayOfMonth).timeInMillis
-            adapterRecyclerView.submitList(viewModel.eventsOfDays(timestamp))
+        viewModel.getEventsOfToday.observe(requireActivity()) { eventsOfDay ->
+            adapterRecyclerView.submitList(eventsOfDay)
             binding.recyclerViewEvents.adapter = adapterRecyclerView
         }
 
+        binding.calendar.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            val timestamp = GregorianCalendar(year, month, dayOfMonth).timeInMillis
+            viewModel.eventsOfDays(timestamp).observe(requireActivity()) { eventsOfDay ->
+                adapterRecyclerView.submitList(eventsOfDay)
+                binding.recyclerViewEvents.adapter = adapterRecyclerView
+            }
+        }
         binding.floatingActionButton.setOnClickListener {
             clickListener?.routeAddEventFragment()
         }
