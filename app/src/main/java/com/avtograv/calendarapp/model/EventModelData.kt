@@ -1,6 +1,6 @@
 package com.avtograv.calendarapp.model
 
-data class CalendarEvent(
+data class EventModelData(
 
     val id: String,
     val dateStart: Long,

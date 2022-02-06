@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.avtograv.calendarapp.data.realw.EventRealmModel
-import com.avtograv.calendarapp.model.CalendarEvent
+import com.avtograv.calendarapp.model.EventModelData
 import io.realm.Realm
 import java.sql.Date
 import java.text.SimpleDateFormat
@@ -14,12 +14,12 @@ import java.util.*
 class EventViewModel : ViewModel() {
 
     private val calendar = Calendar.getInstance()
-    val getEventsOfToday: LiveData<List<CalendarEvent>>
+    val getEventsOfToday: LiveData<List<EventModelData>>
         get() = eventsOfDays(calendar.timeInMillis)
 
-    fun eventsOfDays(timestampThisDay: Long): MutableLiveData<List<CalendarEvent>> {
+    fun eventsOfDays(timestampThisDay: Long): MutableLiveData<List<EventModelData>> {
         val realm = Realm.getDefaultInstance()
-        val listEvents = MutableLiveData<List<CalendarEvent>>()
+        val listEvents = MutableLiveData<List<EventModelData>>()
         val dateToday = SimpleDateFormat("yyyy.MM.dd", Locale.US).format(Date(timestampThisDay))
         realm.use {
             val events = realm
@@ -34,8 +34,8 @@ class EventViewModel : ViewModel() {
         return listEvents
     }
 
-    private fun mapEvent(event: EventRealmModel): CalendarEvent {
-        return CalendarEvent(
+    private fun mapEvent(event: EventRealmModel): EventModelData {
+        return EventModelData(
             id = event.id,
             name = event.name,
             description = event.description!!,
