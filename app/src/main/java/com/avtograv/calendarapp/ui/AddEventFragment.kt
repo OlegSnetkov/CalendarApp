@@ -39,7 +39,7 @@ class AddEventFragment : Fragment() {
 
         setFragmentResultListener("fromDateRangePicker") { _, bundle ->
             val eventDateStart = bundle.getLong("fromDateTimestamp")
-            this.eventDateStartList.addAll(
+            eventDateStartList.addAll(
                 listOf(
                     SimpleDateFormat("yyyy", Locale.US).format(Date(eventDateStart)),
                     SimpleDateFormat("MM", Locale.US).format(Date(eventDateStart)),
@@ -104,7 +104,7 @@ class AddEventFragment : Fragment() {
 
             buttonAddEvent.setOnClickListener {
 
-                val eventDateTimeStart = GregorianCalendar(
+                val eventTimestampStart = GregorianCalendar(
                     eventDateStartList[0]!!.toInt(),
                     eventDateStartList[1]!!.toInt() - 1,
                     eventDateStartList[2]!!.toInt(),
@@ -112,7 +112,7 @@ class AddEventFragment : Fragment() {
                     eventTimeStartList[1]!!.toInt()
                 ).timeInMillis
 
-                val eventDateTimeFinish = GregorianCalendar(
+                val eventTimestampFinish = GregorianCalendar(
                     eventDateFinishList[0]!!.toInt(),
                     eventDateFinishList[1]!!.toInt() - 1,
                     eventDateFinishList[2]!!.toInt(),
@@ -120,12 +120,10 @@ class AddEventFragment : Fragment() {
                     eventTimeFinishList[1]!!.toInt()
                 ).timeInMillis
 
-                textInputNameEvent.error = ""
-
                 if (viewModel.isValid(editTextNameEvent.text.toString())) {
                     viewModel.addEvent(
-                        eventDateTimeStart,
-                        eventDateTimeFinish,
+                        eventTimestampStart,
+                        eventTimestampFinish,
                         editTextNameEvent.text.toString(),
                         editTextDescription.text.toString()
                     )

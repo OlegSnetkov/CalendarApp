@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.avtograv.calendarapp.databinding.FragmentCalendarBinding
 import com.avtograv.calendarapp.viewmodels.EventViewModel
-
+import java.util.*
 
 class CalendarFragment : Fragment() {
 
@@ -18,7 +18,6 @@ class CalendarFragment : Fragment() {
     private var clickListener: OnAddEvent? = null
     private lateinit var adapterRecyclerView: AdapterRecyclerView
     private val viewModel: EventViewModel by activityViewModels()
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,8 +39,15 @@ class CalendarFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapterRecyclerView = AdapterRecyclerView()
-        viewModel.allEvents.observe(requireActivity()) { allEvents ->
-            adapterRecyclerView.submitList(allEvents)
+
+//        viewModel.getEventsOfToday.observe(requireActivity()) { eventsOfDay ->
+//            adapterRecyclerView.submitList(eventsOfDay)
+//            binding.recyclerViewEvents.adapter = adapterRecyclerView
+//        }
+
+        binding.calendar.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            val timestamp = GregorianCalendar(year, month, dayOfMonth).timeInMillis
+            adapterRecyclerView.submitList(viewModel.eventsOfDays(timestamp))
             binding.recyclerViewEvents.adapter = adapterRecyclerView
         }
 

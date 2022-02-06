@@ -16,6 +16,9 @@ open class EventRealmModel : RealmModel {
     var dateFinish: Long = 0
 
     @Required
+    var dateStartStr: String = ""
+
+    @Required
     var name: String = ""
     var description: String? = null
 }

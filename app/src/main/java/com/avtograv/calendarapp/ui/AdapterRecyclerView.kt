@@ -8,20 +8,26 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.avtograv.calendarapp.data.realw.EventRealmModel
 import com.avtograv.calendarapp.databinding.EventRowBinding
+import com.avtograv.calendarapp.model.CalendarEvent
+import java.sql.Date
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class AdapterRecyclerView :
-    ListAdapter<EventRealmModel, AdapterRecyclerView.EventHolder>(AsyncDifferConfig.Builder(
+    ListAdapter<CalendarEvent, AdapterRecyclerView.EventHolder>(AsyncDifferConfig.Builder(
         DiffCallback()).build()) {
 
     inner class EventHolder(private val eventRowBinding: EventRowBinding) :
         RecyclerView.ViewHolder(eventRowBinding.root) {
 
-        fun bind(eventModelData: EventRealmModel?) {
-            eventRowBinding.tvEventName.text = eventModelData?.name
-            eventRowBinding.tvEventDescription.text = eventModelData?.description
-            eventRowBinding.tvBeginEventTime.text = eventModelData?.dateStart.toString()
-            eventRowBinding.tvFinishEventTime.text = eventModelData?.dateFinish.toString()
+        fun bind(calendarEvent: CalendarEvent?) {
+            eventRowBinding.tvEventName.text = calendarEvent?.name
+            eventRowBinding.tvEventDescription.text = calendarEvent?.description
+            eventRowBinding.tvBeginEventTime.text =
+                SimpleDateFormat("h:mm", Locale.US).format(Date(calendarEvent!!.dateStart))
+            eventRowBinding.tvFinishEventTime.text =
+                SimpleDateFormat("h:mm", Locale.US).format(Date(calendarEvent.dateFinish))
         }
     }
 
@@ -39,12 +45,12 @@ class AdapterRecyclerView :
     }
 }
 
-private class DiffCallback : DiffUtil.ItemCallback<EventRealmModel>() {
-    override fun areItemsTheSame(oldItem: EventRealmModel, newItem: EventRealmModel): Boolean {
+private class DiffCallback : DiffUtil.ItemCallback<CalendarEvent>() {
+    override fun areItemsTheSame(oldItem: CalendarEvent, newItem: CalendarEvent): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: EventRealmModel, newItem: EventRealmModel): Boolean {
+    override fun areContentsTheSame(oldItem: CalendarEvent, newItem: CalendarEvent): Boolean {
         return oldItem.id == newItem.id
     }
 }
