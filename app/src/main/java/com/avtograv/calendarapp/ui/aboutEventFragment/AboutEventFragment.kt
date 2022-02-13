@@ -2,7 +2,6 @@ package com.avtograv.calendarapp.ui.aboutEventFragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,13 +43,12 @@ class AboutEventFragment : Fragment() {
             val eventId = bundle.getString("event_id")
             viewModelFactory = ViewModelFactory(eventId!!)
             viewModel = ViewModelProvider(this, viewModelFactory)[DescriptionViewModel::class.java]
-
-            val liveData = viewModel.getDescriptionEvent.observe(viewLifecycleOwner){}
-            Log.d("liveData in fragment", liveData.toString())
-
-//            viewModel.getDescriptionEvent.observe(viewLifecycleOwner) { eventRealmModel ->
-//
-//            }
+            viewModel.getDescriptionEvent.observe(viewLifecycleOwner) { eventModelData ->
+                binding.tvEventName.text = eventModelData.name
+                binding.tvEventDescription.text = eventModelData.description
+                binding.tvEventStart.text = eventModelData.dateStart.toString()
+                binding.tvEventFinish.text = eventModelData.dateFinish.toString()
+            }
         }
     }
 
