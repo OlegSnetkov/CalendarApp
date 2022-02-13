@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.avtograv.calendarapp.R
-import com.avtograv.calendarapp.ui.aboutEventFragment.AboutEventFragment
+import com.avtograv.calendarapp.ui.aboutEventFragment.DescriptionEventFragment
+import com.avtograv.calendarapp.ui.addEventFragment.AddEventFragment
 import com.avtograv.calendarapp.ui.calendarFragment.CalendarFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -54,8 +55,8 @@ class MainActivity : AppCompatActivity(), AddEventFragment.ClickAddEvent,
         supportFragmentManager.beginTransaction()
             .replace(
                 R.id.container,
-                AboutEventFragment.create(),
-                AboutEventFragment::class.java.simpleName,
+                DescriptionEventFragment.create(),
+                DescriptionEventFragment::class.java.simpleName,
             )
             .addToBackStack("routeEventAboutFragment")
             .commit()

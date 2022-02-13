@@ -1,6 +1,5 @@
 package com.avtograv.calendarapp.ui.aboutEventFragment
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.avtograv.calendarapp.data.realw.EventRealmModel
 import com.avtograv.calendarapp.model.EventModelData
 import io.realm.Realm
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class DescriptionViewModel(private val getIdEvent: String) : ViewModel() {
@@ -33,8 +34,8 @@ class DescriptionViewModel(private val getIdEvent: String) : ViewModel() {
             id = event.id,
             name = event.name,
             description = event.description!!,
-            dateStart = event.dateStart,
-            dateFinish = event.dateFinish
+            dateStart = SimpleDateFormat("h:mm", Locale.US).format(Date(event.dateStart)),
+            dateFinish = SimpleDateFormat("h:mm", Locale.US).format(Date(event.dateFinish))
         )
     }
 }

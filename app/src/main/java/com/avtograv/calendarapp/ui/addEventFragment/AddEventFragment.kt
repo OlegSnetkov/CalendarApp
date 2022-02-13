@@ -1,4 +1,4 @@
-package com.avtograv.calendarapp.ui
+package com.avtograv.calendarapp.ui.addEventFragment
 
 import android.content.Context
 import android.os.Bundle
@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import com.avtograv.calendarapp.databinding.FragmentAddEventBinding
-import com.avtograv.calendarapp.ui.calendarFragment.EventViewModel
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,7 +19,7 @@ class AddEventFragment : Fragment() {
     private var _binding: FragmentAddEventBinding? = null
     private val binding get() = _binding!!
     private var clickListener: ClickAddEvent? = null
-    private val viewModel: EventViewModel by activityViewModels()
+    private val viewModel: AddEventViewModel by activityViewModels()
 
     private var eventDateStartList = mutableListOf<String?>()
     private var eventDateFinishList = mutableListOf<String?>()

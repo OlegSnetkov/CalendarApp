@@ -8,9 +8,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.avtograv.calendarapp.databinding.EventRowBinding
 import com.avtograv.calendarapp.model.EventModelData
-import java.sql.Date
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class AdapterRecyclerView(private val onClickListener: OnClickListener) :
@@ -23,10 +20,8 @@ class AdapterRecyclerView(private val onClickListener: OnClickListener) :
         fun bind(calendarEvent: EventModelData?) {
             eventRowBinding.tvEventName.text = calendarEvent?.name
             eventRowBinding.tvEventDescription.text = calendarEvent?.description
-            eventRowBinding.tvBeginEventTime.text =
-                SimpleDateFormat("h:mm", Locale.US).format(Date(calendarEvent!!.dateStart))
-            eventRowBinding.tvFinishEventTime.text =
-                SimpleDateFormat("h:mm", Locale.US).format(Date(calendarEvent.dateFinish))
+            eventRowBinding.tvBeginEventTime.text = calendarEvent!!.dateStart
+            eventRowBinding.tvFinishEventTime.text = calendarEvent.dateFinish
         }
     }
 

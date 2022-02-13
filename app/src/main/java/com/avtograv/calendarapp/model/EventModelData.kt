@@ -1,11 +1,10 @@
 package com.avtograv.calendarapp.model
 
-data class EventModelData(
 
+data class EventModelData(
     val id: String,
-    val dateStart: Long,
-    val dateFinish: Long,
-    val dateStartStr: String = "",
     val name: String,
     val description: String,
+    val dateStart: String,
+    val dateFinish: String,
 )
