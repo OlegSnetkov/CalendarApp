@@ -1,4 +1,4 @@
-package com.avtograv.calendarapp.ui
+package com.avtograv.calendarapp.ui.calendarFragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

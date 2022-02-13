@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import com.avtograv.calendarapp.databinding.FragmentAddEventBinding
-import com.avtograv.calendarapp.viewmodels.EventViewModel
+import com.avtograv.calendarapp.ui.calendarFragment.EventViewModel
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*

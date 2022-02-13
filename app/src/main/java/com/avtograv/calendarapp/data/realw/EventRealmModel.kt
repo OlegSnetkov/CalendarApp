@@ -10,6 +10,10 @@ import org.bson.types.ObjectId
 @RealmClass
 open class EventRealmModel : RealmModel {
 
+    @Required
+    var name: String = ""
+    var description: String? = null
+
     @PrimaryKey
     var id: String = ObjectId().toHexString()
     var dateStart: Long = 0
@@ -18,7 +22,5 @@ open class EventRealmModel : RealmModel {
     @Required
     var dateStartStr: String = ""
 
-    @Required
-    var name: String = ""
-    var description: String? = null
+
 }

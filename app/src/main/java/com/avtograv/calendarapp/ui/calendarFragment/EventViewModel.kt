@@ -1,4 +1,4 @@
-package com.avtograv.calendarapp.viewmodels
+package com.avtograv.calendarapp.ui.calendarFragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

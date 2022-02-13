@@ -1,16 +1,16 @@
-package com.avtograv.calendarapp.ui
+package com.avtograv.calendarapp.ui.calendarFragment
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import com.avtograv.calendarapp.databinding.FragmentCalendarBinding
 import com.avtograv.calendarapp.model.EventModelData
-import com.avtograv.calendarapp.viewmodels.EventViewModel
 import java.util.*
 
 class CalendarFragment : Fragment() {
@@ -51,7 +51,7 @@ class CalendarFragment : Fragment() {
 
         binding.calendar.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val timestamp = GregorianCalendar(year, month, dayOfMonth).timeInMillis
-            viewModel.eventsOfDays(timestamp).observe(requireActivity()) { eventsOfDay ->
+            viewModel.eventsOfDays(timestamp).observe(viewLifecycleOwner) { eventsOfDay ->
                 adapterRecyclerView.submitList(eventsOfDay)
                 binding.recyclerViewEvents.adapter = adapterRecyclerView
             }
@@ -62,7 +62,8 @@ class CalendarFragment : Fragment() {
     }
 
     private fun routeAboutEvent(event: EventModelData) {
-        Toast.makeText(requireContext(), "Event ID ${event.id}", Toast.LENGTH_LONG).show()
+        clickListener?.routeEventAboutFragment()
+        setFragmentResult("get_event_description", bundleOf("event_id" to event.id))
     }
 
     override fun onDetach() {
@@ -77,6 +78,7 @@ class CalendarFragment : Fragment() {
 
     interface OnAddEvent {
         fun routeAddEventFragment()
+        fun routeEventAboutFragment()
     }
 
     companion object {
