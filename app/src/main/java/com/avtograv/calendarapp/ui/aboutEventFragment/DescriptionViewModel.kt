@@ -34,14 +34,15 @@ class DescriptionViewModel(private val getIdEvent: String) : ViewModel() {
             id = event.id,
             name = event.name,
             description = event.description!!,
-            dateStart = SimpleDateFormat("h:mm", Locale.US).format(Date(event.dateStart)),
-            dateFinish = SimpleDateFormat("h:mm", Locale.US).format(Date(event.dateFinish))
+            dateStart = SimpleDateFormat("HH:mm", Locale.US).format(Date(event.dateStart)),
+            dateFinish = SimpleDateFormat("HH:mm", Locale.US).format(Date(event.dateFinish))
         )
     }
 }
 
+
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory(private val getIdEvent: String) : ViewModelProvider.Factory {
+ class ViewModelFactory(private val getIdEvent: String) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DescriptionViewModel::class.java)) {
             return DescriptionViewModel(getIdEvent) as T

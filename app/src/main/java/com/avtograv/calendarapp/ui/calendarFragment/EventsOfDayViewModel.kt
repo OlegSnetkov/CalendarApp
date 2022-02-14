@@ -11,11 +11,32 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class EventViewModel : ViewModel() {
+class EventsOfDayViewModel : ViewModel() {
 
     private val calendar = Calendar.getInstance()
     val getEventsOfToday: LiveData<List<EventModelData>>
         get() = eventsOfDays(calendar.timeInMillis)
+
+    private fun mapEvent(event: EventRealmModel): EventModelData {
+        val dayStart = SimpleDateFormat("dd",
+            Locale.US).format(java.util.Date(event.dateStart))
+        val dayFinish = SimpleDateFormat("dd",
+            Locale.US).format(java.util.Date(event.dateFinish))
+
+        if (dayStart.equals(dayFinish)) {
+            val dateStartStr =
+                SimpleDateFormat("HH:mm", Locale.US).format(java.util.Date(event.dateStart))
+        }
+        return EventModelData(
+            id = event.id,
+            name = event.name,
+            description = event.description!!,
+            dateStart = SimpleDateFormat("HH:mm",
+                Locale.US).format(java.util.Date(event.dateStart)),
+            dateFinish = SimpleDateFormat("HH:mm",
+                Locale.US).format(java.util.Date(event.dateFinish))
+        )
+    }
 
     fun eventsOfDays(timestampThisDay: Long): MutableLiveData<List<EventModelData>> {
         val realm = Realm.getDefaultInstance()
@@ -25,23 +46,23 @@ class EventViewModel : ViewModel() {
             val events = realm
                 .where(EventRealmModel::class.java)
                 .equalTo("dateStartStr", dateToday)
+                .sort("dateStart")
                 .findAll()
                 .map {
                     mapEvent(it)
                 }
+
             listEvents.value = events.subList(0, events.size)
         }
         return listEvents
     }
 
-    private fun mapEvent(event: EventRealmModel): EventModelData {
-        return EventModelData(
-            id = event.id,
-            name = event.name,
-            description = event.description!!,
-            dateStart = SimpleDateFormat("h:mm", Locale.US).format(java.util.Date(event.dateStart)),
-            dateFinish = SimpleDateFormat("h:mm",
-                Locale.US).format(java.util.Date(event.dateFinish))
-        )
-    }
+//    fun deleteAllEvents() {
+//        val realm = Realm.getDefaultInstance()
+//        realm.use {
+//            realm.executeTransaction { realm: Realm ->
+//                realm.delete(EventRealmModel::class.java)
+//            }
+//        }
+//    }
 }
