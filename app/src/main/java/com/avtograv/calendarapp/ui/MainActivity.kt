@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.avtograv.calendarapp.R
-import com.avtograv.calendarapp.ui.aboutEventFragment.DescriptionEventFragment
-import com.avtograv.calendarapp.ui.addEventFragment.AddEventFragment
-import com.avtograv.calendarapp.ui.calendarFragment.CalendarFragment
+import com.avtograv.calendarapp.ui.aboutEvent.DescriptionEventFragment
+import com.avtograv.calendarapp.ui.addEvent.AddEventFragment
+import com.avtograv.calendarapp.ui.getEvents.CalendarFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat

@@ -1,9 +1,9 @@
-package com.avtograv.calendarapp.ui.calendarFragment
+package com.avtograv.calendarapp.ui.getEvents
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.avtograv.calendarapp.data.realw.EventRealmModel
+import com.avtograv.calendarapp.realm.EventRealmModel
 import com.avtograv.calendarapp.model.EventModelData
 import io.realm.Realm
 import java.sql.Date

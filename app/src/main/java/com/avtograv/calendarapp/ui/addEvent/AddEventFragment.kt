@@ -1,4 +1,4 @@
-package com.avtograv.calendarapp.ui.addEventFragment
+package com.avtograv.calendarapp.ui.addEvent
 
 import android.content.Context
 import android.os.Bundle
@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.ViewModelProvider
 import com.avtograv.calendarapp.databinding.FragmentAddEventBinding
+import com.avtograv.calendarapp.realm.DatabaseOperations
+import com.avtograv.calendarapp.repositories.EventRepositoryImpl
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,7 +21,8 @@ class AddEventFragment : Fragment() {
     private var _binding: FragmentAddEventBinding? = null
     private val binding get() = _binding!!
     private var clickListener: ClickAddEvent? = null
-    private val viewModel: AddEventViewModel by activityViewModels()
+
+    private lateinit var viewModel: AddEventViewModel
 
     private var eventDateStartList = mutableListOf<String?>()
     private var eventDateFinishList = mutableListOf<String?>()
@@ -82,6 +85,10 @@ class AddEventFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val viewModelFactory = AddEventViewModelFactory(EventRepositoryImpl(DatabaseOperations()))
+        viewModel = ViewModelProvider(
+            this, viewModelFactory)[AddEventViewModel::class.java]
 
         setupButtons()
     }

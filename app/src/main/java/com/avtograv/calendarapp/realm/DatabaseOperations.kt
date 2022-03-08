@@ -1,19 +1,18 @@
-package com.avtograv.calendarapp.ui.addEventFragment
+package com.avtograv.calendarapp.realm
 
-import androidx.lifecycle.ViewModel
-import com.avtograv.calendarapp.data.realw.EventRealmModel
 import io.realm.Realm
+import io.realm.kotlin.executeTransactionAwait
+import kotlinx.coroutines.Dispatchers
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
 
+class DatabaseOperations {
 
-class AddEventViewModel : ViewModel() {
-
-    fun addEvent(dateStart: Long, dateFinish: Long, name: String, description: String?) {
+    suspend fun insertEvent(dateStart: Long, dateFinish: Long, name: String, description: String?) {
         val realm = Realm.getDefaultInstance()
         realm.use {
-            realm.executeTransaction { realm: Realm ->
+            realm.executeTransactionAwait(Dispatchers.IO) { realm: Realm ->
                 val event =
                     realm.createObject(EventRealmModel::class.java, UUID.randomUUID().toString())
                 event.dateStart = dateStart
@@ -26,6 +25,4 @@ class AddEventViewModel : ViewModel() {
             }
         }
     }
-
-    fun isValid(name: String) = name.isNotEmpty()
 }

@@ -1,4 +1,4 @@
-package com.avtograv.calendarapp.ui.aboutEventFragment
+package com.avtograv.calendarapp.ui.aboutEvent
 
 import android.os.Bundle
 import android.view.LayoutInflater

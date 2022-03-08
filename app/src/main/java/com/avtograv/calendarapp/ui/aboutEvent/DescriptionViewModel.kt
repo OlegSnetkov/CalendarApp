@@ -1,10 +1,10 @@
-package com.avtograv.calendarapp.ui.aboutEventFragment
+package com.avtograv.calendarapp.ui.aboutEvent
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.avtograv.calendarapp.data.realw.EventRealmModel
+import com.avtograv.calendarapp.realm.EventRealmModel
 import com.avtograv.calendarapp.model.EventModelData
 import io.realm.Realm
 import java.text.SimpleDateFormat

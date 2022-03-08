@@ -1,4 +1,4 @@
-package com.avtograv.calendarapp.data.realw
+package com.avtograv.calendarapp.realm
 
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
