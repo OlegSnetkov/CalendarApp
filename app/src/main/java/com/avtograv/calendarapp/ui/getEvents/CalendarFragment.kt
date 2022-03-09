@@ -1,17 +1,23 @@
 package com.avtograv.calendarapp.ui.getEvents
 
 import android.content.Context
+import android.icu.util.Calendar
+import android.icu.util.GregorianCalendar
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.avtograv.calendarapp.databinding.FragmentCalendarBinding
-import com.avtograv.calendarapp.model.EventModelData
-import java.util.*
+import com.avtograv.calendarapp.model.EventModel
+import com.avtograv.calendarapp.realm.DatabaseOperations
+import com.avtograv.calendarapp.repository.EventDataStatus
+import com.avtograv.calendarapp.repository.EventRepositoryImpl
 
 
 class CalendarFragment : Fragment() {
@@ -19,8 +25,8 @@ class CalendarFragment : Fragment() {
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
     private var clickListener: OnAddEvent? = null
-    private lateinit var adapterRecyclerView: AdapterRecyclerView
-    private val viewModel: EventsOfDayViewModel by activityViewModels()
+    private lateinit var viewModel: GetEventsViewModel
+    private lateinit var eventListAdapter: Adapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,32 +46,54 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        uiComponentsSetup()
+        viewModelSetup()
+    }
 
-        adapterRecyclerView = AdapterRecyclerView(AdapterRecyclerView.OnClickListener { event ->
-            routeAboutEvent(event)
-        })
-
-        viewModel.getEventsOfToday.observe(requireActivity()) { eventsOfDay ->
-            adapterRecyclerView.submitList(eventsOfDay)
-            binding.recyclerViewEvents.adapter = adapterRecyclerView
-        }
-
-        binding.calendar.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            val timestamp = GregorianCalendar(year, month, dayOfMonth).timeInMillis
-//            viewModel.deleteAllEvents()
-            viewModel.eventsOfDays(timestamp).observe(viewLifecycleOwner) { eventsOfDay ->
-                adapterRecyclerView.submitList(eventsOfDay)
-                binding.recyclerViewEvents.adapter = adapterRecyclerView
+    private fun viewModelSetup() {
+        val dbRealm = DatabaseOperations()
+        val repository = EventRepositoryImpl(dbRealm)
+        val viewModelFactory = CalendarViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[GetEventsViewModel::class.java]
+        viewModel.eventsTodayDataStatus.observe(viewLifecycleOwner) { status ->
+            when (status) {
+                EventDataStatus.Loading -> Log.d("status loading", status.toString())
+                is EventDataStatus.Result -> {
+                    eventListAdapter.addItems(status.eventList)
+                    Log.d("status result", status.toString())
+                }
+                EventDataStatus.Added -> Log.d("status added", status.toString())
+                EventDataStatus.Deleted -> Log.d("status deleted", status.toString())
             }
-        }
-        binding.floatingActionButton.setOnClickListener {
-            clickListener?.routeAddEventFragment()
         }
     }
 
-    private fun routeAboutEvent(event: EventModelData) {
+    private fun uiComponentsSetup() {
+        binding.apply {
+            floatingActionButton.setOnClickListener {
+                clickListener?.routeAddEventFragment()
+            }
+            calendar.setOnDateChangeListener { _, year, month, dayOfMonth ->
+                val timestamp = GregorianCalendar(year, month, dayOfMonth).timeInMillis
+                viewModel.eventsOfDays(timestamp)
+            }
+
+            itemEventList.layoutManager = LinearLayoutManager(requireContext())
+            eventListAdapter = Adapter(Adapter.OnClickListener { event ->
+                routeAboutEvent(event)
+            })
+            itemEventList.adapter = eventListAdapter
+        }
+    }
+
+    private fun routeAboutEvent(event: EventModel) {
         clickListener?.routeEventAboutFragment()
         setFragmentResult("get_event_description", bundleOf("event_id" to event.id))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.eventsOfDays(Calendar.getInstance().timeInMillis)
     }
 
     override fun onDetach() {

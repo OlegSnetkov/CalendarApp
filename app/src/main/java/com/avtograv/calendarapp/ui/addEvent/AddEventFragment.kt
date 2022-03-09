@@ -10,7 +10,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import com.avtograv.calendarapp.databinding.FragmentAddEventBinding
 import com.avtograv.calendarapp.realm.DatabaseOperations
-import com.avtograv.calendarapp.repositories.EventRepositoryImpl
+import com.avtograv.calendarapp.repository.EventRepositoryImpl
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,10 +24,10 @@ class AddEventFragment : Fragment() {
 
     private lateinit var viewModel: AddEventViewModel
 
-    private var eventDateStartList = mutableListOf<String?>()
-    private var eventDateFinishList = mutableListOf<String?>()
-    private var eventTimeStartList = mutableListOf<String?>()
-    private var eventTimeFinishList = mutableListOf<String?>()
+    private var eventStartDateList = mutableListOf<String?>()
+    private var eventEndDateList = mutableListOf<String?>()
+    private var eventStartTimeList = mutableListOf<String?>()
+    private var eventEndTimeList = mutableListOf<String?>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,34 +40,35 @@ class AddEventFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         setFragmentResultListener("fromDateRangePicker") { _, bundle ->
-            val eventDateStart = bundle.getLong("fromDateTimestamp")
-            eventDateStartList.addAll(
+
+            val eventStartDateTimestamp = bundle.getLong("fromDateTimestamp")
+            eventStartDateList.addAll(
                 listOf(
-                    SimpleDateFormat("yyyy", Locale.US).format(Date(eventDateStart)),
-                    SimpleDateFormat("MM", Locale.US).format(Date(eventDateStart)),
-                    SimpleDateFormat("d", Locale.US).format(Date(eventDateStart))
+                    SimpleDateFormat("yyyy", Locale.US).format(Date(eventStartDateTimestamp)),
+                    SimpleDateFormat("MM", Locale.US).format(Date(eventStartDateTimestamp)),
+                    SimpleDateFormat("d", Locale.US).format(Date(eventStartDateTimestamp))
                 )
             )
 
-            val eventDateFinish = bundle.getLong("toDateTimestamp")
-            eventDateFinishList.addAll(
+            val eventEndDateTimestamp = bundle.getLong("toDateTimestamp")
+            eventEndDateList.addAll(
                 listOf(
-                    SimpleDateFormat("yyyy", Locale.US).format(Date(eventDateFinish)),
-                    SimpleDateFormat("MM", Locale.US).format(Date(eventDateFinish)),
-                    SimpleDateFormat("d", Locale.US).format(Date(eventDateFinish))
+                    SimpleDateFormat("yyyy", Locale.US).format(Date(eventEndDateTimestamp)),
+                    SimpleDateFormat("MM", Locale.US).format(Date(eventEndDateTimestamp)),
+                    SimpleDateFormat("d", Locale.US).format(Date(eventEndDateTimestamp))
                 )
             )
         }
 
         setFragmentResultListener("timeEventFrom") { _, bundle ->
-            eventTimeStartList = mutableListOf(
+            eventStartTimeList = mutableListOf(
                 bundle.getString("FromHour"),
                 bundle.getString("FromMinute")
             )
         }
 
         setFragmentResultListener("timeEventTo") { _, bundle ->
-            eventTimeFinishList = mutableListOf(
+            eventEndTimeList = mutableListOf(
                 bundle.getString("ToHour"),
                 bundle.getString("ToMinute")
             )
@@ -86,44 +87,47 @@ class AddEventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModelFactory = AddEventViewModelFactory(EventRepositoryImpl(DatabaseOperations()))
-        viewModel = ViewModelProvider(
-            this, viewModelFactory)[AddEventViewModel::class.java]
-
-        setupButtons()
+        viewModelSetup()
+        buttonsSetup()
     }
 
-    private fun setupButtons() {
+    private fun viewModelSetup() {
+        val dbRealm = DatabaseOperations()
+        val repository = EventRepositoryImpl(dbRealm)
+        val viewModelFactory = AddEventViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[AddEventViewModel::class.java]
+    }
 
+    private fun buttonsSetup() {
         binding.apply {
-            btSetRangeDate.setOnClickListener {
+            buttonSetRangeDate.setOnClickListener {
                 clickListener?.setRangeDatePicker()
             }
 
-            btSetFromTime.setOnClickListener {
+            buttonSetFromTime.setOnClickListener {
                 clickListener?.setFromTimePicker()
             }
 
-            btSetToTime.setOnClickListener {
+            buttonSetToTime.setOnClickListener {
                 clickListener?.setToTimePicker()
             }
 
             buttonAddEvent.setOnClickListener {
 
                 val eventTimestampStart = GregorianCalendar(
-                    eventDateStartList[0]!!.toInt(),
-                    eventDateStartList[1]!!.toInt() - 1,
-                    eventDateStartList[2]!!.toInt(),
-                    eventTimeStartList[0]!!.toInt(),
-                    eventTimeStartList[1]!!.toInt()
+                    eventStartDateList[0]!!.toInt(),
+                    eventStartDateList[1]!!.toInt() - 1,
+                    eventStartDateList[2]!!.toInt(),
+                    eventStartTimeList[0]!!.toInt(),
+                    eventStartTimeList[1]!!.toInt()
                 ).timeInMillis
 
                 val eventTimestampFinish = GregorianCalendar(
-                    eventDateFinishList[0]!!.toInt(),
-                    eventDateFinishList[1]!!.toInt() - 1,
-                    eventDateFinishList[2]!!.toInt(),
-                    eventTimeFinishList[0]!!.toInt(),
-                    eventTimeFinishList[1]!!.toInt()
+                    eventEndDateList[0]!!.toInt(),
+                    eventEndDateList[1]!!.toInt() - 1,
+                    eventEndDateList[2]!!.toInt(),
+                    eventEndTimeList[0]!!.toInt(),
+                    eventEndTimeList[1]!!.toInt()
                 ).timeInMillis
 
                 if (viewModel.isValid(editTextNameEvent.text.toString())) {

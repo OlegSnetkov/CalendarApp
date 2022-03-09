@@ -71,7 +71,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline_from" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/bt_set_range_date"
+        android:id="@+id/button_set_range_date"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline_to" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/bt_set_from_time"
+        android:id="@+id/button_set_from_time"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="142dp"
         android:layout_height="wrap_content"
@@ -111,11 +111,11 @@
         android:backgroundTint="@color/colorSecondary"
         android:text="@string/from_time"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_to"
-        app:layout_constraintEnd_toStartOf="@+id/bt_set_to_time"
+        app:layout_constraintEnd_toStartOf="@+id/button_set_to_time"
         app:layout_constraintTop_toTopOf="@+id/guideline_to" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/bt_set_to_time"
+        android:id="@+id/button_set_to_time"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="142dp"
         android:layout_height="wrap_content"

@@ -15,7 +15,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import com.avtograv.calendarapp.R
 import com.avtograv.calendarapp.databinding.FragmentEventAboutBinding
-import com.avtograv.calendarapp.model.EventModelData
+import com.avtograv.calendarapp.model.EventModel
 
 
 class DescriptionEventFragment : Fragment() {
@@ -51,7 +51,7 @@ class DescriptionEventFragment : Fragment() {
     }
 
     @Composable
-    private fun DetailsAboutEvent(event: EventModelData) {
+    private fun DetailsAboutEvent(event: EventModel) {
         Column {
             Text(
                 text = "Name event: ${event.name}",

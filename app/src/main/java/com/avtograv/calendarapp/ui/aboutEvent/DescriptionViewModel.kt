@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.avtograv.calendarapp.realm.EventRealmModel
-import com.avtograv.calendarapp.model.EventModelData
+import com.avtograv.calendarapp.model.EventModel
 import io.realm.Realm
 import java.text.SimpleDateFormat
 import java.util.*
@@ -13,12 +13,12 @@ import java.util.*
 
 class DescriptionViewModel(private val getIdEvent: String) : ViewModel() {
 
-    val getDescriptionEvent: LiveData<EventModelData>
+    val getDescriptionEvent: LiveData<EventModel>
         get() = descriptionEvent(getIdEvent)
 
-    private fun descriptionEvent(idEvent: String): MutableLiveData<EventModelData> {
+    private fun descriptionEvent(idEvent: String): MutableLiveData<EventModel> {
         val realm = Realm.getDefaultInstance()
-        val realmEvent = MutableLiveData<EventModelData>()
+        val realmEvent = MutableLiveData<EventModel>()
         realm.use {
             val event = realm
                 .where(EventRealmModel::class.java)
@@ -29,8 +29,8 @@ class DescriptionViewModel(private val getIdEvent: String) : ViewModel() {
         return realmEvent
     }
 
-    private fun mapEvent(event: EventRealmModel): EventModelData {
-        return EventModelData(
+    private fun mapEvent(event: EventRealmModel): EventModel {
+        return EventModel(
             id = event.id,
             name = event.name,
             description = event.description!!,

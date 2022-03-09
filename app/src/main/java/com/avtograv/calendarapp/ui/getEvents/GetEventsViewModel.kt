@@ -1,4 +1,4 @@
-package com.avtograv.calendarapp.ui.addEvent
+package com.avtograv.calendarapp.ui.getEvents
 
 import androidx.lifecycle.*
 import com.avtograv.calendarapp.repository.EventDataStatus
@@ -7,31 +7,29 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
-class AddEventViewModel(private val eventRepository: EventRepository) : ViewModel() {
+class GetEventsViewModel(private val eventRepository: EventRepository) : ViewModel() {
 
     private val _eventDataStatus = MutableLiveData<EventDataStatus>()
-    val addEventDataStatus: LiveData<EventDataStatus>
+    val eventsTodayDataStatus: LiveData<EventDataStatus>
         get() {
             return _eventDataStatus
         }
 
-    fun addEvent(dateStart: Long, dateFinish: Long, name: String, description: String?) {
+    fun eventsOfDays(timestampThisDay: Long) {
         viewModelScope.launch {
-            eventRepository.addEvent(dateStart, dateFinish, name, description).collect {
+            eventRepository.eventsOfDays(timestampThisDay).collect {
                 _eventDataStatus.value = it
             }
         }
     }
-
-    fun isValid(name: String) = name.isNotEmpty()
 }
 
 @Suppress("UNCHECKED_CAST")
-class AddEventViewModelFactory(private val eventRepository: EventRepository) :
+class CalendarViewModelFactory(private val eventRepository: EventRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AddEventViewModel::class.java)) {
-            return AddEventViewModel(eventRepository) as T
+        if (modelClass.isAssignableFrom(GetEventsViewModel::class.java)) {
+            return GetEventsViewModel(eventRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
