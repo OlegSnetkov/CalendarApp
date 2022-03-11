@@ -1,51 +1,35 @@
 package com.avtograv.calendarapp.ui.aboutEvent
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.avtograv.calendarapp.realm.EventRealmModel
-import com.avtograv.calendarapp.model.EventModel
-import io.realm.Realm
-import java.text.SimpleDateFormat
-import java.util.*
+import androidx.lifecycle.*
+import com.avtograv.calendarapp.repository.EventDataStatus
+import com.avtograv.calendarapp.repository.EventRepository
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
-class DescriptionViewModel(private val getIdEvent: String) : ViewModel() {
+class DescriptionViewModel(private val eventRepository: EventRepository) : ViewModel() {
 
-    val getDescriptionEvent: LiveData<EventModel>
-        get() = descriptionEvent(getIdEvent)
-
-    private fun descriptionEvent(idEvent: String): MutableLiveData<EventModel> {
-        val realm = Realm.getDefaultInstance()
-        val realmEvent = MutableLiveData<EventModel>()
-        realm.use {
-            val event = realm
-                .where(EventRealmModel::class.java)
-                .equalTo("id", idEvent)
-                .findFirst()!!
-            realmEvent.value = mapEvent(event)
+    private val _eventDataStatus = MutableLiveData<EventDataStatus>()
+    val descriptionDataStatus: LiveData<EventDataStatus>
+        get() {
+            return _eventDataStatus
         }
-        return realmEvent
-    }
 
-    private fun mapEvent(event: EventRealmModel): EventModel {
-        return EventModel(
-            id = event.id,
-            name = event.name,
-            description = event.description!!,
-            dateStart = SimpleDateFormat("HH:mm", Locale.US).format(Date(event.dateStart)),
-            dateFinish = SimpleDateFormat("HH:mm", Locale.US).format(Date(event.dateFinish))
-        )
+    fun aboutEvent(idEvent: String) {
+        viewModelScope.launch {
+            eventRepository.descriptionEvent(idEvent).collect {
+                _eventDataStatus.value = it
+            }
+        }
     }
 }
 
-
 @Suppress("UNCHECKED_CAST")
- class ViewModelFactory(private val getIdEvent: String) : ViewModelProvider.Factory {
+class DescriptionViewModelFactory(private val eventRepository: EventRepository) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DescriptionViewModel::class.java)) {
-            return DescriptionViewModel(getIdEvent) as T
+            return DescriptionViewModel(eventRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

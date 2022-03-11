@@ -4,7 +4,6 @@ import android.content.Context
 import android.icu.util.Calendar
 import android.icu.util.GregorianCalendar
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +49,11 @@ class CalendarFragment : Fragment() {
         viewModelSetup()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.eventsOfDays(Calendar.getInstance().timeInMillis)
+    }
+
     private fun viewModelSetup() {
         val dbRealm = DatabaseOperations()
         val repository = EventRepositoryImpl(dbRealm)
@@ -57,13 +61,8 @@ class CalendarFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[GetEventsViewModel::class.java]
         viewModel.eventsTodayDataStatus.observe(viewLifecycleOwner) { status ->
             when (status) {
-                EventDataStatus.Loading -> Log.d("status loading", status.toString())
-                is EventDataStatus.Result -> {
-                    eventListAdapter.addItems(status.eventList)
-                    Log.d("status result", status.toString())
-                }
-                EventDataStatus.Added -> Log.d("status added", status.toString())
-                EventDataStatus.Deleted -> Log.d("status deleted", status.toString())
+                // TODO
+                is EventDataStatus.ResultList -> eventListAdapter.submitList(status.eventList)
             }
         }
     }
@@ -89,11 +88,6 @@ class CalendarFragment : Fragment() {
     private fun routeAboutEvent(event: EventModel) {
         clickListener?.routeEventAboutFragment()
         setFragmentResult("get_event_description", bundleOf("event_id" to event.id))
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.eventsOfDays(Calendar.getInstance().timeInMillis)
     }
 
     override fun onDetach() {

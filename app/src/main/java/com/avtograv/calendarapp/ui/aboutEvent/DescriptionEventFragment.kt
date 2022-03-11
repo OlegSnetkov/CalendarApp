@@ -16,6 +16,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.avtograv.calendarapp.R
 import com.avtograv.calendarapp.databinding.FragmentEventAboutBinding
 import com.avtograv.calendarapp.model.EventModel
+import com.avtograv.calendarapp.realm.DatabaseOperations
+import com.avtograv.calendarapp.repository.EventDataStatus
+import com.avtograv.calendarapp.repository.EventRepositoryImpl
 
 
 class DescriptionEventFragment : Fragment() {
@@ -24,7 +27,7 @@ class DescriptionEventFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: DescriptionViewModel
-    private lateinit var viewModelFactory: ViewModelFactory
+    private var eventId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,17 +40,33 @@ class DescriptionEventFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModelSetup()
 
         setFragmentResultListener("get_event_description") { _, bundle ->
-            val eventId = bundle.getString("event_id")
-            viewModelFactory = ViewModelFactory(eventId!!)
-            viewModel = ViewModelProvider(this, viewModelFactory)[DescriptionViewModel::class.java]
-            viewModel.getDescriptionEvent.observe(viewLifecycleOwner) { eventModelData ->
-                binding.greeting.setContent {
-                    DetailsAboutEvent(eventModelData)
+            eventId = bundle.getString("event_id")
+            viewModel.descriptionDataStatus.observe(viewLifecycleOwner) { status ->
+                when (status) {
+                    EventDataStatus.Added -> TODO()
+                    EventDataStatus.Loading -> TODO()
+                    is EventDataStatus.Result -> binding.greeting.setContent {
+                        DetailsAboutEvent(status.event)
+                    }
+                    is EventDataStatus.ResultList -> TODO()
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.aboutEvent(eventId!!)
+    }
+
+    private fun viewModelSetup() {
+        val dbRealm = DatabaseOperations()
+        val repository = EventRepositoryImpl(dbRealm)
+        val viewModelFactory = DescriptionViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[DescriptionViewModel::class.java]
     }
 
     @Composable

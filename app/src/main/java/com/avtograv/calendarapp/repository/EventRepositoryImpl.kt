@@ -22,10 +22,12 @@ class EventRepositoryImpl(private val databaseOperations: DatabaseOperations) : 
     override fun eventsOfDays(timestampThisDay: Long): Flow<EventDataStatus> = flow {
         emit(EventDataStatus.Loading)
         val eventsToday = databaseOperations.retrieveEvents(timestampThisDay)
-        emit(EventDataStatus.Result(eventsToday))
+        emit(EventDataStatus.ResultList(eventsToday))
     }.flowOn(Dispatchers.IO)
 
-    override fun descriptionEvent(idEvent: String): Flow<EventDataStatus> {
-        TODO("Not yet implemented")
-    }
+    override fun descriptionEvent(idEvent: String): Flow<EventDataStatus> = flow {
+        emit(EventDataStatus.Loading)
+        val aboutEvent = databaseOperations.descriptionEvent(idEvent)
+        emit(EventDataStatus.Result(aboutEvent))
+    }.flowOn(Dispatchers.IO)
 }

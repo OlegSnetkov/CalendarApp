@@ -8,7 +8,10 @@ import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class DatabaseOperations {
+
+    private lateinit var eventRealmModel: EventRealmModel
 
     suspend fun retrieveEvents(timestampToday: Long): List<EventModel> {
         val realm = Realm.getDefaultInstance()
@@ -29,22 +32,10 @@ class DatabaseOperations {
         return filteredEvents
     }
 
-    private fun mapEvent(event: EventRealmModel): EventModel {
-        return EventModel(
-            id = event.id,
-            name = event.name,
-            description = event.description!!,
-            dateStart = SimpleDateFormat("HH:mm",
-                Locale.US).format(java.util.Date(event.dateStart)),
-            dateFinish = SimpleDateFormat("HH:mm",
-                Locale.US).format(java.util.Date(event.dateFinish))
-        )
-    }
-
     suspend fun insertEvent(dateStart: Long, dateFinish: Long, name: String, description: String?) {
         val realm = Realm.getDefaultInstance()
         realm.use {
-            realm.executeTransactionAwait(Dispatchers.IO) { realm: Realm ->
+            realm.executeTransactionAwait(Dispatchers.IO) { realm ->
                 val event =
                     realm.createObject(EventRealmModel::class.java, UUID.randomUUID().toString())
                 event.dateStart = dateStart
@@ -58,7 +49,32 @@ class DatabaseOperations {
         }
     }
 
-    fun deleteAllEvents() {
+    suspend fun descriptionEvent(idEvent: String): EventModel {
+        val realm = Realm.getDefaultInstance()
+        realm.use {
+            realm.executeTransactionAwait(Dispatchers.IO) { realm ->
+                eventRealmModel = realm
+                    .where(EventRealmModel::class.java)
+                    .equalTo("id", idEvent)
+                    .findFirst()!!
+            }
+            return mapEvent(eventRealmModel)
+        }
+    }
+
+    private fun mapEvent(event: EventRealmModel): EventModel {
+        return EventModel(
+            id = event.id,
+            name = event.name,
+            description = event.description!!,
+            dateStart = SimpleDateFormat("HH:mm",
+                Locale.US).format(java.util.Date(event.dateStart)),
+            dateFinish = SimpleDateFormat("HH:mm",
+                Locale.US).format(java.util.Date(event.dateFinish))
+        )
+    }
+
+    suspend fun deleteAllEvents() {
         val realm = Realm.getDefaultInstance()
         realm.use {
             realm.executeTransaction { realm: Realm ->

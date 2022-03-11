@@ -1,6 +1,5 @@
 package com.avtograv.calendarapp.ui.getEvents
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncDifferConfig
@@ -14,8 +13,6 @@ import com.avtograv.calendarapp.model.EventModel
 class Adapter(private val onClickListener: OnClickListener) :
     ListAdapter<EventModel, Adapter.EventViewHolder>(
         AsyncDifferConfig.Builder(DiffCallback()).build()) {
-
-    private val events = mutableListOf<EventModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val binding = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -33,22 +30,15 @@ class Adapter(private val onClickListener: OnClickListener) :
     }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
-        val event = events[position]
-        holder.bind(event)
+        val item = getItem(position)
+        holder.bind(item)
         holder.itemView.setOnClickListener {
-            onClickListener.onClick(event)
+            onClickListener.onClick(item)
         }
     }
 
     class OnClickListener(val clickListener: (event: EventModel) -> Unit) {
         fun onClick(event: EventModel) = clickListener(event)
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun addItems(eventList: List<EventModel>) {
-        events.clear()
-        events.addAll(eventList)
-        notifyDataSetChanged()
     }
 }
 
