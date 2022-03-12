@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class DatabaseOperations {
+class RealmOperations {
 
     private lateinit var eventRealmModel: EventRealmModel
 

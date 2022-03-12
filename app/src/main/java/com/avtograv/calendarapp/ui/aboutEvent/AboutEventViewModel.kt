@@ -7,29 +7,29 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
-class DescriptionViewModel(private val eventRepository: EventRepository) : ViewModel() {
+class AboutEventViewModel(private val eventRepository: EventRepository) : ViewModel() {
 
-    private val _eventDataStatus = MutableLiveData<EventDataStatus>()
-    val descriptionDataStatus: LiveData<EventDataStatus>
+    private val _aboutEventDataStatus = MutableLiveData<EventDataStatus>()
+    val aboutEventDataStatus: LiveData<EventDataStatus>
         get() {
-            return _eventDataStatus
+            return _aboutEventDataStatus
         }
 
     fun aboutEvent(idEvent: String) {
         viewModelScope.launch {
             eventRepository.descriptionEvent(idEvent).collect {
-                _eventDataStatus.value = it
+                _aboutEventDataStatus.value = it
             }
         }
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-class DescriptionViewModelFactory(private val eventRepository: EventRepository) :
+class AboutEventViewModelFactory(private val eventRepository: EventRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(DescriptionViewModel::class.java)) {
-            return DescriptionViewModel(eventRepository) as T
+        if (modelClass.isAssignableFrom(AboutEventViewModel::class.java)) {
+            return AboutEventViewModel(eventRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

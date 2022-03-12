@@ -23,7 +23,8 @@ class AddEventViewModel(private val eventRepository: EventRepository) : ViewMode
         }
     }
 
-    fun isValid(name: String) = name.isNotEmpty()
+    fun isValid(dateStart: Long, dateFinish: Long, name: String) =
+        name.isNotEmpty() && (dateStart < dateFinish)
 }
 
 @Suppress("UNCHECKED_CAST")

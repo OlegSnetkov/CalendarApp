@@ -1,9 +1,11 @@
 package com.avtograv.calendarapp.ui.aboutEvent
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
@@ -16,17 +18,17 @@ import androidx.lifecycle.ViewModelProvider
 import com.avtograv.calendarapp.R
 import com.avtograv.calendarapp.databinding.FragmentEventAboutBinding
 import com.avtograv.calendarapp.model.EventModel
-import com.avtograv.calendarapp.realm.DatabaseOperations
+import com.avtograv.calendarapp.realm.RealmOperations
 import com.avtograv.calendarapp.repository.EventDataStatus
 import com.avtograv.calendarapp.repository.EventRepositoryImpl
 
 
-class DescriptionEventFragment : Fragment() {
+class AboutEventFragment : Fragment() {
 
     private var _binding: FragmentEventAboutBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: DescriptionViewModel
+    private lateinit var viewModel: AboutEventViewModel
     private var eventId: String? = null
 
     override fun onCreateView(
@@ -44,14 +46,16 @@ class DescriptionEventFragment : Fragment() {
 
         setFragmentResultListener("get_event_description") { _, bundle ->
             eventId = bundle.getString("event_id")
-            viewModel.descriptionDataStatus.observe(viewLifecycleOwner) { status ->
+            viewModel.aboutEventDataStatus.observe(viewLifecycleOwner) { status ->
                 when (status) {
-                    EventDataStatus.Added -> TODO()
-                    EventDataStatus.Loading -> TODO()
+                    EventDataStatus.Loading -> Toast.makeText(requireContext(),
+                        getString(R.string.loaded_description),
+                        Toast.LENGTH_SHORT).show()
                     is EventDataStatus.Result -> binding.greeting.setContent {
+                        Log.d("statusResult", status.toString())
                         DetailsAboutEvent(status.event)
                     }
-                    is EventDataStatus.ResultList -> TODO()
+                    else -> throw IllegalArgumentException()
                 }
             }
         }
@@ -63,10 +67,10 @@ class DescriptionEventFragment : Fragment() {
     }
 
     private fun viewModelSetup() {
-        val dbRealm = DatabaseOperations()
+        val dbRealm = RealmOperations()
         val repository = EventRepositoryImpl(dbRealm)
-        val viewModelFactory = DescriptionViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory)[DescriptionViewModel::class.java]
+        val viewModelFactory = AboutEventViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[AboutEventViewModel::class.java]
     }
 
     @Composable
@@ -109,6 +113,6 @@ class DescriptionEventFragment : Fragment() {
     }
 
     companion object {
-        fun create() = DescriptionEventFragment()
+        fun create() = AboutEventFragment()
     }
 }

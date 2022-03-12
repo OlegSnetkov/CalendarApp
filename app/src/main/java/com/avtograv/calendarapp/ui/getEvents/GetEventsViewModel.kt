@@ -17,7 +17,7 @@ class GetEventsViewModel(private val eventRepository: EventRepository) : ViewMod
 
     fun eventsOfDays(timestampThisDay: Long) {
         viewModelScope.launch {
-            eventRepository.eventsOfDays(timestampThisDay).collect {
+            eventRepository.eventsOfDay(timestampThisDay).collect {
                 _eventDataStatus.value = it
             }
         }

@@ -9,13 +9,11 @@
 
     <string name="add_event">Add event</string>
     <string name="Enter_date_and_time">Enter date and time</string>
+    <string name="event_added">Event added</string>
+    <string name="adding_event">Adding event</string>
+    <string name="loading_events">Loading events</string>
+    <string name="loaded_description">Description loaded</string>
 
-
-    <string name="age">Age</string>
-
-
-    <string name="name_error">Name cannot be empty</string>
-    <string name="owned_by">Owner: %s</string>
     <string name="date_or_range_dates">date / range dates</string>
     <string name="from_time">From time</string>
     <string name="to_time">To time</string>

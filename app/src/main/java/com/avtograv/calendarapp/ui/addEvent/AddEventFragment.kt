@@ -5,11 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import com.avtograv.calendarapp.R
 import com.avtograv.calendarapp.databinding.FragmentAddEventBinding
-import com.avtograv.calendarapp.realm.DatabaseOperations
+import com.avtograv.calendarapp.realm.RealmOperations
+import com.avtograv.calendarapp.repository.EventDataStatus
 import com.avtograv.calendarapp.repository.EventRepositoryImpl
 import java.sql.Date
 import java.text.SimpleDateFormat
@@ -92,10 +96,21 @@ class AddEventFragment : Fragment() {
     }
 
     private fun viewModelSetup() {
-        val dbRealm = DatabaseOperations()
+        val dbRealm = RealmOperations()
         val repository = EventRepositoryImpl(dbRealm)
         val viewModelFactory = AddEventViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[AddEventViewModel::class.java]
+        viewModel.addEventDataStatus.observe(viewLifecycleOwner) { status ->
+            when (status) {
+                EventDataStatus.Loading -> Toast.makeText(requireContext(),
+                    getString(R.string.adding_event),
+                    Toast.LENGTH_SHORT).show()
+                EventDataStatus.Added -> Toast.makeText(requireContext(),
+                    getString(R.string.event_added),
+                    Toast.LENGTH_SHORT).show()
+                else -> throw IllegalArgumentException()
+            }
+        }
     }
 
     private fun buttonsSetup() {
@@ -104,44 +119,48 @@ class AddEventFragment : Fragment() {
                 clickListener?.setRangeDatePicker()
             }
 
-            buttonSetFromTime.setOnClickListener {
+            buttonSetStartTimeEvent.setOnClickListener {
                 clickListener?.setFromTimePicker()
             }
 
-            buttonSetToTime.setOnClickListener {
+            buttonSetFinishTimeEvent.setOnClickListener {
                 clickListener?.setToTimePicker()
             }
 
-            buttonAddEvent.setOnClickListener {
-
-                val eventTimestampStart = GregorianCalendar(
-                    eventStartDateList[0]!!.toInt(),
-                    eventStartDateList[1]!!.toInt() - 1,
-                    eventStartDateList[2]!!.toInt(),
-                    eventStartTimeList[0]!!.toInt(),
-                    eventStartTimeList[1]!!.toInt()
-                ).timeInMillis
-
-                val eventTimestampFinish = GregorianCalendar(
-                    eventEndDateList[0]!!.toInt(),
-                    eventEndDateList[1]!!.toInt() - 1,
-                    eventEndDateList[2]!!.toInt(),
-                    eventEndTimeList[0]!!.toInt(),
-                    eventEndTimeList[1]!!.toInt()
-                ).timeInMillis
-
-                if (viewModel.isValid(editTextNameEvent.text.toString())) {
-                    viewModel.addEvent(
-                        eventTimestampStart,
-                        eventTimestampFinish,
-                        editTextNameEvent.text.toString(),
-                        editTextDescription.text.toString()
-                    )
-
+            buttonAddNewEvent.apply {
+                setOnClickListener {
+                    addNewEvent(editTextNameEvent, editTextDescription)
                     clickListener?.routeCalendarFragment()
                 }
             }
         }
+    }
+
+    private fun addNewEvent(nameEvent: EditText, descriptionEvent: EditText) {
+        val eventStartTime = GregorianCalendar(
+            eventStartDateList[0]!!.toInt(),
+            eventStartDateList[1]!!.toInt() - 1,
+            eventStartDateList[2]!!.toInt(),
+            eventStartTimeList[0]!!.toInt(),
+            eventStartTimeList[1]!!.toInt()
+        ).timeInMillis
+
+        val eventFinishTime = GregorianCalendar(
+            eventEndDateList[0]!!.toInt(),
+            eventEndDateList[1]!!.toInt() - 1,
+            eventEndDateList[2]!!.toInt(),
+            eventEndTimeList[0]!!.toInt(),
+            eventEndTimeList[1]!!.toInt()
+        ).timeInMillis
+
+        if (viewModel.isValid(eventStartTime, eventFinishTime, nameEvent.text.toString())) {
+            binding.buttonAddNewEvent.isEnabled = true
+            viewModel.addEvent(eventStartTime,
+                eventFinishTime,
+                nameEvent.text.toString(),
+                descriptionEvent.text.toString()
+            )
+        } else binding.buttonAddNewEvent.isEnabled = false
     }
 
     override fun onDetach() {
